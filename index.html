@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>my imaginary dog</title>
+<style>
+  :root{
+    --choco:#6e5647;
+    --white:#fff;
+    --shadow:0 10px 25px rgba(0,0,0,.08);
+    --radius:16px;
+  }
+  /* ページ全体＆スマホ枠 */
+  body{
+    margin:0;
+    min-height:100svh;
+    display:grid; place-items:center;
+    background:#f7f3ff;
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
+    color:var(--choco);
+  }
+  .phone{
+    width:min(420px,96vw);
+    aspect-ratio:3/4;                 /* 縦長比率に合わせてスケール */
+    position:relative;
+    border:4px solid #bda9ff;
+    border-radius:24px;
+    overflow:hidden;
+    background:#fff;                  /* 読み込み中の下地 */
+    box-shadow:0 12px 40px rgba(0,0,0,.12);
+  }
+
+  /* 画面（PDF＋ボタン） */
+  .screen{ position:absolute; inset:0; display:none; }
+  .screen.active{ display:block; }
+
+  /* PDFを全面に敷く */
+  .bgwrap{ position:absolute; inset:0; z-index:0; }
+  .bgdoc{
+    width:100%; height:100%;
+    border:0;
+    pointer-events:none;              /* PDFのクリックを無効化してボタン操作を優先 */
+  }
+  /* objectのフォールバック画像（PDF非対応環境） */
+  .bgwrap picture,img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+
+  /* ボタン群（背景PDFの上） */
+  .overlay{
+    position:absolute; inset:0; z-index:1;
+    display:flex; flex-direction:column;
+    padding:14px;
+  }
+
+  /* ホーム画面の3ボタン（下に固定） */
+  .home-buttons{
+    margin-top:auto;
+    display:grid;
+    gap:12px;
+  }
+  .home-buttons button{
+    background:var(--white);
+    border:0; border-radius:14px;
+    padding:12px 16px;
+    font-size:20px; letter-spacing:.35em;
+    color:var(--choco);
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    transition:transform .05s ease;
+  }
+  .home-buttons button:active{ transform:translateY(1px) scale(.995); }
+
+  /* 子画面の左上「ホームへ」 */
+  .home-icon{
+    width:40px; height:40px;
+    border-radius:12px;
+    background:#fff; box-shadow:var(--shadow);
+    display:grid; place-items:center;
+    user-select:none; cursor:pointer;
+    margin:6px;
+    font-weight:700;
+  }
+  .home-icon:active{ transform:translateY(1px); }
+
+  @media (prefers-reduced-motion: reduce){
+    .home-buttons button{ transition:none; }
+  }
+
+  /* ←追加部分 */
+.home-buttons button:hover {
+  background: #fff8e8;        /* ふんわり明るく */
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+  transform: translateY(-2px); /* 少し浮く感じ */
+}
+
+.home-buttons button:active {
+  background: #ffedc8;        /* 押した時の色 */
+  transform: translateY(1px) scale(.98);
+  box-shadow: 0 3px 8px rgba(0,0,0,.1);
+}
+
+/* ホームボタン（）も軽く反応 */
+.home-icon:hover {
+  background: #fff5e2;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0,0,0,.15);
+}
+.home-icon:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,.1);
+}
+</style>
+</head>
+<body>
+<main class="phone" id="app">
+
+  <!-- ======= ホーム ======= -->
+  <section class="screen active" data-screen="home" aria-label="ホーム">
+    <div class="bgwrap" aria-hidden="true">
+      <!-- PDFが最優先（URL末尾の #toolbar=0 でツールバー非表示） -->
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/home.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <!-- PDFが表示できない場合は下の画像を表示 -->
+        <picture>
+          <img src="images/home.png" alt="">
+        </picture>
+      </object>
+    </div>
+
+    <div class="overlay">
+      <!-- 背景にタイトル等が描かれている想定。ボタンだけ用意 -->
+      <div class="home-buttons">
+        <button data-goto="walk">さんぽ</button>
+        <button data-goto="bath">おふろ</button>
+        <button data-goto="sleep">ねる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= さんぽ ======= -->
+  <section class="screen" data-screen="walk" aria-label="さんぽ">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/walk.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture><img src="images/walk.png" alt=""></picture>
+      </object>
+    </div>
+    <div class="overlay">
+      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
+      <!-- 必要なら、この画面専用のボタンをここに追加 -->
+    </div>
+  </section>
+
+  <!-- ======= おふろ ======= -->
+  <section class="screen" data-screen="bath" aria-label="おふろ">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/bath.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture><img src="images/bath.png" alt=""></picture>
+      </object>
+    </div>
+    <div class="overlay">
+      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
+    </div>
+  </section>
+
+  <!-- ======= ねる ======= -->
+  <section class="screen" data-screen="sleep" aria-label="ねる">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/sleep.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture><img src="images/sleep.png" alt=""></picture>
+      </object>
+    </div>
+    <div class="overlay">
+      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // 画面切替（PDFは下層、ボタンは上層）
+  const app = document.getElementById('app');
+  function show(name){
+    document.querySelectorAll('.screen').forEach(sc=>{
+      sc.classList.toggle('active', sc.dataset.screen===name);
+    });
+  }
+  app.addEventListener('click', e=>{
+    const trg = e.target.closest('[data-goto]');
+    if(!trg) return;
+    show(trg.getAttribute('data-goto'));
+  });
+</script>
+</body>
+</html>
