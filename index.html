@@ -22,12 +22,12 @@
   }
   .phone{
     width:min(420px,96vw);
-    aspect-ratio:3/4;                 /* 縦長比率に合わせてスケール */
+    aspect-ratio:3/4;
     position:relative;
     border:4px solid #bda9ff;
     border-radius:24px;
     overflow:hidden;
-    background:#fff;                  /* 読み込み中の下地 */
+    background:#fff;
     box-shadow:0 12px 40px rgba(0,0,0,.12);
   }
 
@@ -40,11 +40,21 @@
   .bgdoc{
     width:100%; height:100%;
     border:0;
-    pointer-events:none;              /* PDFのクリックを無効化してボタン操作を優先 */
+    pointer-events:none;
   }
-  /* objectのフォールバック画像（PDF非対応環境） */
-  .bgwrap picture,img{
-    width:100%; height:100%; object-fit:cover; display:block;
+  /* 画像を中央配置 */
+  .bgwrap picture{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .bgwrap img{
+    width:50%;
+    height:50%;
+    object-fit:contain;
+    transform:translateY(-25%);
   }
 
   /* ボタン群（背景PDFの上） */
@@ -52,6 +62,36 @@
     position:absolute; inset:0; z-index:1;
     display:flex; flex-direction:column;
     padding:14px;
+  }
+
+  /* 右上のボタン群 */
+  .top-buttons{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    margin-bottom:auto;
+  }
+  .top-buttons a{
+    background:var(--white);
+    border:0; border-radius:10px;
+    padding:8px 12px;
+    font-size:13px;
+    color:var(--choco);
+    text-decoration:none;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    transition:transform .05s ease;
+    white-space:nowrap;
+  }
+  .top-buttons a:hover{
+    background:#fff8e8;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    transform:translateY(-2px);
+  }
+  .top-buttons a:active{
+    background:#ffedc8;
+    transform:translateY(1px) scale(.98);
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
   }
 
   /* ホーム画面の3ボタン（下に固定） */
@@ -70,7 +110,16 @@
     cursor:pointer;
     transition:transform .05s ease;
   }
-  .home-buttons button:active{ transform:translateY(1px) scale(.995); }
+  .home-buttons button:hover {
+    background: #fff8e8;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    transform: translateY(-2px);
+  }
+  .home-buttons button:active{
+    background: #ffedc8;
+    transform: translateY(1px) scale(.98);
+    box-shadow: 0 3px 8px rgba(0,0,0,.1);
+  }
 
   /* 子画面の左上「ホームへ」 */
   .home-icon{
@@ -82,35 +131,21 @@
     margin:6px;
     font-weight:700;
   }
-  .home-icon:active{ transform:translateY(1px); }
-
-  @media (prefers-reduced-motion: reduce){
-    .home-buttons button{ transition:none; }
+  .home-icon:hover {
+    background: #fff5e2;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,.15);
+  }
+  .home-icon:active{
+    transform:translateY(1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,.1);
   }
 
-  /* ←追加部分 */
-.home-buttons button:hover {
-  background: #fff8e8;        /* ふんわり明るく */
-  box-shadow: 0 8px 20px rgba(0,0,0,.15);
-  transform: translateY(-2px); /* 少し浮く感じ */
-}
-
-.home-buttons button:active {
-  background: #ffedc8;        /* 押した時の色 */
-  transform: translateY(1px) scale(.98);
-  box-shadow: 0 3px 8px rgba(0,0,0,.1);
-}
-
-/* ホームボタン（）も軽く反応 */
-.home-icon:hover {
-  background: #fff5e2;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(0,0,0,.15);
-}
-.home-icon:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 6px rgba(0,0,0,.1);
-}
+  @media (prefers-reduced-motion: reduce){
+    .home-buttons button,
+    .top-buttons a,
+    .home-icon{ transition:none; }
+  }
 </style>
 </head>
 <body>
@@ -119,18 +154,19 @@
   <!-- ======= ホーム ======= -->
   <section class="screen active" data-screen="home" aria-label="ホーム">
     <div class="bgwrap" aria-hidden="true">
-      <!-- PDFが最優先（URL末尾の #toolbar=0 でツールバー非表示） -->
       <object class="bgdoc" type="application/pdf"
               data="pdfs/home.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
-        <!-- PDFが表示できない場合は下の画像を表示 -->
         <picture>
-          <img src="images/home.png" alt="">
+          <img src="images/sizu.png" alt="" id="dogImage">
         </picture>
       </object>
     </div>
 
     <div class="overlay">
-      <!-- 背景にタイトル等が描かれている想定。ボタンだけ用意 -->
+      <div class="top-buttons">
+        <a href="dog-select.html">いぬ変更</a>
+        <a href="bg-select.html">背景変更</a>
+      </div>
       <div class="home-buttons">
         <button data-goto="walk">さんぽ</button>
         <button data-goto="bath">おふろ</button>
@@ -148,8 +184,7 @@
       </object>
     </div>
     <div class="overlay">
-      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
-      <!-- 必要なら、この画面専用のボタンをここに追加 -->
+      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
     </div>
   </section>
 
@@ -162,7 +197,7 @@
       </object>
     </div>
     <div class="overlay">
-      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
+      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
     </div>
   </section>
 
@@ -175,13 +210,35 @@
       </object>
     </div>
     <div class="overlay">
-      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
+      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
     </div>
   </section>
 
 </main>
 
 <script>
+  // 犬の画像設定
+  const dogImages = {
+    sizu: 'images/sizu.png',
+    pome: 'images/pome.png',
+    shiba: 'images/shiba.png',
+    hasuki: 'images/hasuki.png',
+    pagu: 'images/pagu.png',
+    kogi: 'images/kogi.png'
+  };
+
+  // URLパラメータから犬を取得
+  const params = new URLSearchParams(window.location.search);
+  const selectedDog = params.get('dog') || 'sizu';
+
+  // ページ読み込み時に画像を設定
+  window.addEventListener('load', () => {
+    const dogImg = document.getElementById('dogImage');
+    if(dogImg && dogImages[selectedDog]) {
+      dogImg.src = dogImages[selectedDog];
+    }
+  });
+
   // 画面切替（PDFは下層、ボタンは上層）
   const app = document.getElementById('app');
   function show(name){
