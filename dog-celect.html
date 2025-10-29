@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>いぬを選ぶ</title>
+<style>
+  :root{
+    --choco:#6e5647;
+    --white:#fff;
+    --shadow:0 10px 25px rgba(0,0,0,.08);
+  }
+  body{
+    margin:0;
+    min-height:100svh;
+    display:grid; place-items:center;
+    background:#f7f3ff;
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
+    color:var(--choco);
+  }
+  .phone{
+    width:min(420px,96vw);
+    aspect-ratio:3/4;
+    position:relative;
+    border:4px solid #bda9ff;
+    border-radius:24px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:0 12px 40px rgba(0,0,0,.12);
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+  }
+
+  h1{
+    text-align:center;
+    font-size:24px;
+    margin:0 0 20px;
+    color:var(--choco);
+  }
+
+  .dog-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    flex:1;
+    overflow-y:auto;
+    padding:10px;
+  }
+
+  .dog-card{
+    background:var(--white);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    text-align:center;
+    cursor:pointer;
+    transition:all .2s ease;
+    text-decoration:none;
+    color:var(--choco);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .dog-card:hover{
+    background:#fff8e8;
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+  }
+
+  .dog-card:active{
+    transform:translateY(0) scale(.98);
+  }
+
+  .dog-preview{
+    width:100%;
+    aspect-ratio:1;
+    object-fit:contain;
+    border-radius:12px;
+    background:#f9f9f9;
+  }
+
+  .dog-name{
+    font-size:16px;
+    font-weight:600;
+    margin:0;
+  }
+
+  .back-btn{
+    background:var(--white);
+    border:2px solid #bda9ff;
+    border-radius:12px;
+    padding:12px 20px;
+    margin-top:16px;
+    font-size:16px;
+    color:var(--choco);
+    cursor:pointer;
+    transition:all .2s ease;
+    text-decoration:none;
+    display:block;
+    text-align:center;
+  }
+
+  .back-btn:hover{
+    background:#fff8e8;
+    transform:translateY(-2px);
+  }
+
+  .back-btn:active{
+    transform:translateY(0);
+  }
+</style>
+</head>
+<body>
+<main class="phone">
+  <h1>🐕 いぬを選んでね</h1>
+  
+  <div class="dog-grid">
+    <a href="index.html?dog=sizu" class="dog-card">
+      <img src="images/sizu.png" alt="シズ" class="dog-preview">
+      <p class="dog-name">シズ</p>
+    </a>
+    
+    <a href="index.html?dog=pome" class="dog-card">
+      <img src="images/pome.png" alt="ポメラニアン" class="dog-preview">
+      <p class="dog-name">ポメラニアン</p>
+    </a>
+    
+    <a href="index.html?dog=shiba" class="dog-card">
+      <img src="images/shiba.png" alt="柴犬" class="dog-preview">
+      <p class="dog-name">柴犬</p>
+    </a>
+    
+    <a href="index.html?dog=hasuki" class="dog-card">
+      <img src="images/hasuki.png" alt="ハスキー" class="dog-preview">
+      <p class="dog-name">ハスキー</p>
+    </a>
+    
+    <a href="index.html?dog=pagu" class="dog-card">
+      <img src="images/pagu.png" alt="パグ" class="dog-preview">
+      <p class="dog-name">パグ</p>
+    </a>
+    
+    <a href="index.html?dog=kogi" class="dog-card">
+      <img src="images/kogi.png" alt="コーギー" class="dog-preview">
+      <p class="dog-name">コーギー</p>
+    </a>
+  </div>
+
+  <a href="index.html" class="back-btn">← ホームへ戻る</a>
+</main>
+</body>
+</html>
