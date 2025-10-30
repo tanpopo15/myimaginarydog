@@ -42,6 +42,16 @@
     border:0;
     pointer-events:none;
   }
+/* ★ 追加：背景PNG（全体を覆う） */
+.bgimage{
+  position:absolute;
+  inset:0;
+  width:100%; height:100%;
+  object-fit:cover;          /* PNGを余白なく敷く。隙間が嫌なら cover、全部見せたいなら contain */
+  image-rendering:auto;
+  z-index:0;                 /* 犬より下 */
+}
+  
   /* 画像を中央配置 */
   .bgwrap picture{
     position:absolute;
