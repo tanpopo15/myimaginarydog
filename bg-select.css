@@ -1,0 +1,135 @@
+/* ========== CSS変数定義 ========== */
+:root{
+  --choco:#6e5647;
+  --white:#fff;
+  --shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+/* ========== ページ全体 ========== */
+body{
+  margin:0;
+  min-height:100svh;
+  display:grid; 
+  place-items:center;
+  background:#f7f3ff;
+  font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
+  color:var(--choco);
+}
+
+/* ========== スマホ枠 ========== */
+.phone{
+  width:min(420px,96vw);
+  aspect-ratio:3/4;
+  position:relative;
+  border:4px solid #bda9ff;
+  border-radius:24px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 12px 40px rgba(0,0,0,.12);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ========== タイトル ========== */
+h1{
+  text-align:center;
+  font-size:24px;
+  margin:0 0 20px;
+  color:var(--choco);
+}
+
+/* ========== 背景グリッド ========== */
+.bg-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:16px;
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+/* ========== 背景カード ========== */
+.bg-card{
+  background:var(--white);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  text-align:center;
+  cursor:pointer;
+  transition:all .2s ease;
+  text-decoration:none;
+  color:var(--choco);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+
+.bg-card:hover{
+  background:#fff8e8;
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
+}
+
+.bg-card:active{
+  transform:translateY(0) scale(.98);
+}
+
+/* 背景プレビュー画像 */
+.bg-preview{
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:12px;
+  background:#f9f9f9;
+}
+
+/* 背景名 */
+.bg-name{
+  font-size:16px;
+  font-weight:600;
+  margin:0;
+}
+
+/* ========== ホームアイコン ========== */
+.overlay{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:10;
+}
+
+.home-icon{
+  width:40px; 
+  height:40px;
+  border-radius:12px;
+  background:#fff; 
+  box-shadow:var(--shadow);
+  display:grid; 
+  place-items:center;
+  cursor:pointer;
+  margin:6px;
+  font-size:20px;
+  text-decoration:none;
+  transition:all .15s ease;
+}
+
+.home-icon:hover{
+  background:#fff5e2;
+  transform:translateY(-1px);
+  box-shadow:0 6px 12px rgba(0,0,0,.15);
+}
+
+.home-icon:active{
+  transform:translateY(1px);
+  box-shadow:0 3px 6px rgba(0,0,0,.1);
+}
+
+/* ========== アクセシビリティ対応 ========== */
+@media (prefers-reduced-motion: reduce){
+  .bg-card,
+  .home-icon{ 
+    transition:none; 
+  }
+}
