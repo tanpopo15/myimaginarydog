@@ -140,6 +140,12 @@
   .screen{ position:absolute; inset:0; display:none; }
   .screen.active{ display:block; }
 
+  
+  @media (prefers-reduced-motion: reduce){
+    .home-buttons button,
+    .top-buttons a,
+    .home-icon{ transition:none; }
+  }
 
 
 
