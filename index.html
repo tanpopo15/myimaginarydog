@@ -270,9 +270,14 @@
         const el = document.createElement('div');
         el.className = 'particle';
         el.textContent = particle;
-        el.style.left = e.clientX + 'px';
-        el.style.top = e.clientY + 'px';
         
+        // クリック位置を正確に取得
+        const rect = dogImg.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
         document.body.appendChild(el);
         
         setTimeout(() => el.remove(), 1500);
