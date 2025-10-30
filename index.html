@@ -258,10 +258,22 @@
   // URLパラメータから犬を取得
   const params = new URLSearchParams(window.location.search);
   const selectedDog = params.get('dog') || 'sizu';
-
+  /* ====== テーマ適用（★追加） ======
+     localStorage.mid_theme を読んで CSS 変数を書き換える */
+  function applyThemeFromStorage(){
+    const raw = localStorage.getItem('mid_theme');
+    if(!raw) return;
+    try{
+      const t = JSON.parse(raw);
+      if(t.pageBg) document.documentElement.style.setProperty('--page-bg', t.pageBg);
+      if(t.frameBorder) document.documentElement.style.setProperty('--frame-border', t.frameBorder);
+      if(t.glow) document.documentElement.style.setProperty('--glow', t.glow);
+    }catch(e){ /* なにもしない */ }
+  }
   // ページ読み込み時に画像を設定
   // ページ読み込み時に画像を設定
   window.addEventListener('load', () => {
+    applyThemeFromStorage();
     const dogImg = document.getElementById('dogImage');
     if(dogImg && dogImages[selectedDog]) {
       dogImg.src = dogImages[selectedDog];
