@@ -3,27 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お散歩アプリ</title>
-    <link rel="stylesheet" href="style.css">
+    <title>さんぽアプリ</title>
+    <style>
+        /* CSSセクション */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0; /* 背景色 */
+        }
+
+        .screen {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* 画面の最大幅を設定 */
+            height: 80vh; /* 画面の高さ */
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* 画像がはみ出さないように */
+        }
+
+        .screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* ★ここを変更しました：画像を切り取らずにコンテナに収める */
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #f0f0f0; /* ★ここを追加しました：余白の背景色 */
+        }
+
+        /* ボタンの共通スタイル */
+        .btn {
+            position: absolute;
+            z-index: 10; /* 画像より手前に表示 */
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            opacity: 0.9; /* 少し透明にして画像となじませる */
+        }
+
+        .btn:hover {
+            opacity: 1.0;
+            /* カーソルを合わせたときの背景色 */
+            background-color: #ffe9d1 !important;
+        }
+
+        /* 1つ目の画面（さんぽに行きましょう）のボタン */
+        #screen1 .btn-sanpo {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffff; /* 白色 */
+            color: #5d4037; /* 文字色 */
+            border: 1px solid #5d4037;
+        }
+
+        /* 2つ目の画面（まだまだ歩けますよ）のボタン */
+        #screen2 .btn-sanpo-green {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffff; /* 白色 */
+            color: #5d4037;
+        }
+        
+        #screen2 .btn-kaeru {
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffff; /* 白色 */
+            color: #5d4037;
+        }
+
+        /* 画面の表示/非表示を切り替えるCSS */
+        .hidden {
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
-    <div id="app-container">
-        <div id="screen-content">
-            
-            <div id="screen-before" class="screen active">
-                <button id="sanpo-button" class="sanpo-label">さんぽ</button>
-                <p class="walk-message">おさんぽに行きましょう</p>
-                <button class="return-label">かえる</button>
-            </div>
 
-            <div id="screen-after" class="screen">
-                <p class="sanpo-label">さんぽ</p>
-                <p class="walk-message">まだまだ歩けますよ</p>
-                <button class="return-label">かえる</button>
-            </div>
-        </div>
+    <div id="screen1" class="screen">
+        <img src="sanpo_before.png" alt="さんぽに行きましょう">
+        <button class="btn btn-sanpo" onclick="goToScreen(2)">さんぽ</button>
     </div>
-    
-    <script src="script.js"></script>
+
+    <div id="screen2" class="screen hidden">
+        <img src="sanpo_after.png" alt="まだまだ歩けますよ">
+        <button class="btn btn-sanpo-green" onclick="alert('さんぽを続けます！')">さんぽ</button>
+        <button class="btn btn-kaeru" onclick="goToScreen(3)">かえる</button>
+    </div>
+
+    <div id="screen3" class="screen hidden">
+        <img src="kitaku.png" alt="帰宅">
+    </div>
+
+
+    <script>
+        /**
+         * 指定された画面番号に遷移する関数
+         * @param {number} screenNum - 遷移先の画面番号 (1, 2, or 3)
+         */
+        function goToScreen(screenNum) {
+            // 全ての画面要素を取得
+            const screen1 = document.getElementById('screen1');
+            const screen2 = document.getElementById('screen2');
+            const screen3 = document.getElementById('screen3');
+            
+            // 全ての画面を非表示にする
+            screen1.classList.add('hidden');
+            screen2.classList.add('hidden');
+            screen3.classList.add('hidden');
+
+            // 指定された画面番号に応じて、該当の画面を表示する
+            if (screenNum === 1) {
+                screen1.classList.remove('hidden');
+            } else if (screenNum === 2) {
+                screen2.classList.remove('hidden');
+            } else if (screenNum === 3) {
+                screen3.classList.remove('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
