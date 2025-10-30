@@ -30,11 +30,11 @@
         .screen img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* ★ここを変更しました：画像を切り取らずにコンテナに収める */
+            object-fit: contain; /* 画像を切り取らずにコンテナに収める */
             position: absolute;
             top: 0;
             left: 0;
-            background-color: #f0f0f0; /* ★ここを追加しました：余白の背景色 */
+            background-color: #f0f0f0; /* 余白の背景色 */
         }
 
         /* ボタンの共通スタイル */
@@ -48,13 +48,14 @@
             border: none;
             border-radius: 5px;
             text-align: center;
-            opacity: 0.9; /* 少し透明にして画像となじませる */
+            opacity: 0.9;
+            transition: background-color 0.3s ease, opacity 0.3s ease; 
         }
 
         .btn:hover {
             opacity: 1.0;
             /* カーソルを合わせたときの背景色 */
-            background-color: #ffe9d1 !important;
+            background-color: #ffe9d1 !important; 
         }
 
         /* 1つ目の画面（さんぽに行きましょう）のボタン */
@@ -73,7 +74,7 @@
             left: 50%;
             transform: translateX(-50%);
             background-color: #ffff; /* 白色 */
-            color: #5d4037;
+            color: #5d4037; /* 文字色 */
         }
         
         #screen2 .btn-kaeru {
@@ -81,7 +82,7 @@
             left: 50%;
             transform: translateX(-50%);
             background-color: #ffff; /* 白色 */
-            color: #5d4037;
+            color: #5d4037; /* 文字色 */
         }
 
         /* 画面の表示/非表示を切り替えるCSS */
@@ -89,12 +90,46 @@
             display: none;
         }
 
+        /* --- ホームボタンのCSS --- */
+        .home-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, .1);
+            display: grid;
+            place-items: center;
+            user-select: none;
+            cursor: pointer;
+            margin: 6px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .home-icon:hover {
+            background: #fff5e2;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .15);
+        }
+
+        .home-icon:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
+            background: #ffedc8;
+        }
     </style>
 </head>
 <body>
 
     <div id="screen1" class="screen">
         <img src="sanpo_before.png" alt="さんぽに行きましょう">
+        <div class="home-icon" onclick="goToScreen(1)">🏠</div>
         <button class="btn btn-sanpo" onclick="goToScreen(2)">さんぽ</button>
     </div>
 
@@ -106,6 +141,7 @@
 
     <div id="screen3" class="screen hidden">
         <img src="kitaku.png" alt="帰宅">
+        <div class="home-icon" onclick="goToScreen(1)">🏠</div>
     </div>
 
 
