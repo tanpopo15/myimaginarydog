@@ -262,20 +262,22 @@
     }
 
     // 犬の画像タッチエフェクト
-    dogImg.addEventListener('click', (e) => {
-      const particles = ['❤️', '⭐', '✨', '🎵', '💕', '🌟'];
-      const particle = particles[Math.floor(Math.random() * particles.length)];
-      
-      const el = document.createElement('div');
-      el.className = 'particle';
-      el.textContent = particle;
-      el.style.left = e.clientX + 'px';
-      el.style.top = e.clientY + 'px';
-      
-      document.body.appendChild(el);
-      
-      setTimeout(() => el.remove(), 1500);
-    });
+    if(dogImg) {
+      dogImg.addEventListener('click', (e) => {
+        const particles = ['❤️', '⭐', '✨', '🎵', '💕', '🌟'];
+        const particle = particles[Math.floor(Math.random() * particles.length)];
+        
+        const el = document.createElement('div');
+        el.className = 'particle';
+        el.textContent = particle;
+        el.style.left = e.clientX + 'px';
+        el.style.top = e.clientY + 'px';
+        
+        document.body.appendChild(el);
+        
+        setTimeout(() => el.remove(), 1500);
+      });
+    }
   });
 
   // 画面切替（PDFは下層、ボタンは上層）
