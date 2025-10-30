@@ -3,59 +3,109 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>背景をえらぶ - my imaginary dog</title>
-<link rel="stylesheet" href="style.css">
+<title>背景変更 - my imaginary dog</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  /* ==== このページ特有の見た目（追記用。style.cssに入れてもOK） ==== */
+  .bgsel-wrap { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr; padding: 14px; }
+  .bgsel-top { display: flex; align-items: center; gap: 10px; }
+  .bgsel-title { margin: 0; font-weight: 700; letter-spacing: .2em; display: flex; align-items: center; gap: .3em; }
+  .bgsel-title::after { content: "🧺"; font-size: 1.1em; opacity: .7; } /* ハンガーの代わりにピクト */
+
+  .bgsel-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .bgcard {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 8px;
+    background: #fff;
+    border: 0;
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    cursor: pointer;
+    transition: transform .06s ease, box-shadow .12s ease;
+  }
+  .bgcard:focus-visible { outline: 3px solid #bda9ff; }
+  .bgcard:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.12); }
+  .bgcard:active { transform: translateY(1px) scale(.99); box-shadow: 0 6px 14px rgba(0,0,0,.10); }
+
+  .bgcard img {
+    width: 100%;
+    aspect-ratio: 3/4;          /* スクショ比に近い縦長カード */
+    object-fit: cover;          /* 「四角のところが写真」になる */
+    border-radius: 14px;
+    display: block;
+  }
+
+  .bgcard .label {
+    justify-self: center;
+    font-size: 12px;
+    color: #6e5647;
+    background: #fff;
+    border-radius: 999px;
+    padding: 4px 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.06);
+  }
+</style>
 </head>
 <body>
 <main class="phone">
-
   <section class="screen active" aria-label="背景選択">
-    <div class="overlay">
-      <div class="topbar">
+    <div class="bgsel-wrap">
+      <div class="bgsel-top">
         <div class="home-icon" onclick="location.href='index.html'">⌂</div>
-        <h1 class="title">背景をえらぶ</h1>
+        <h1 class="bgsel-title">背景変更</h1>
       </div>
 
-      <div class="grid">
-        <!-- サムネイルは main.js の BACKGROUND_LIST から自動生成する方式でもよいですが
-             ここではHTMLに直書きでもOK。直書き例（4つ）を置いておきます。 -->
-
-        <button class="bgcard" data-bg="images/backgrounds/bg_plain_beige.png">
-          <img src="images/backgrounds/bg_plain_beige.png" alt="プレーン(ベージュ)">
-          <span>プレーン(ベージュ)</span>
+      <div class="bgsel-grid" id="bgGrid">
+        <!-- 6種類：画像は実ファイルに差し替えOK -->
+        <button class="bgcard" data-bg="images/backgrounds/cream.png">
+          <img src="images/backgrounds/cream.png" alt="クリーム">
+          <span class="label">クリーム</span>
         </button>
 
-        <button class="bgcard" data-bg="images/backgrounds/bg_dot_mint.png">
-          <img src="images/backgrounds/bg_dot_mint.png" alt="ドット(ミント)">
-          <span>ドット(ミント)</span>
+        <button class="bgcard" data-bg="images/backgrounds/pink.png">
+          <img src="images/backgrounds/pink.png" alt="ピンク">
+          <span class="label">ピンク</span>
         </button>
 
-        <button class="bgcard" data-bg="images/backgrounds/bg_park.png">
-          <img src="images/backgrounds/bg_park.png" alt="公園">
-          <span>公園</span>
+        <button class="bgcard" data-bg="images/backgrounds/ramune.png">
+          <img src="images/backgrounds/ramune.png" alt="ラムネ">
+          <span class="label">ラムネ</span>
         </button>
 
-        <button class="bgcard" data-bg="images/backgrounds/bg_room.png">
-          <img src="images/backgrounds/bg_room.png" alt="お部屋">
-          <span>お部屋</span>
+        <button class="bgcard" data-bg="images/backgrounds/tanpopo.png">
+          <img src="images/backgrounds/tanpopo.png" alt="たんぽぽ">
+          <span class="label">たんぽぽ</span>
         </button>
 
-        <!-- 画像を増やすときは、上と同じ形でボタンを追加し、data-bg をPNGのパスにするだけ！ -->
+        <button class="bgcard" data-bg="images/backgrounds/mint.png">
+          <img src="images/backgrounds/mint.png" alt="ミント">
+          <span class="label">ミント</span>
+        </button>
+
+        <button class="bgcard" data-bg="images/backgrounds/lavender.png">
+          <img src="images/backgrounds/lavender.png" alt="ラベンダー">
+          <span class="label">ラベンダー</span>
+        </button>
       </div>
     </div>
   </section>
-
 </main>
 
-<script src="main.js"></script>
 <script>
-  // 背景サムネのクリック → 保存 → ホームへ
+  // クリックしたカードの data-bg を保存 → ホームへ戻る
   document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.bgcard');
-    if (!btn) return;
-    const path = btn.getAttribute('data-bg');
+    const card = e.target.closest('.bgcard');
+    if (!card) return;
+    const path = card.getAttribute('data-bg');
     localStorage.setItem('selectedBg', path);
-    // 直後にホームへ戻る
     location.href = 'index.html';
   });
 </script>
