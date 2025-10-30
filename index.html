@@ -254,11 +254,28 @@
   const selectedDog = params.get('dog') || 'sizu';
 
   // ページ読み込み時に画像を設定
+  // ページ読み込み時に画像を設定
   window.addEventListener('load', () => {
     const dogImg = document.getElementById('dogImage');
     if(dogImg && dogImages[selectedDog]) {
       dogImg.src = dogImages[selectedDog];
     }
+
+    // 犬の画像タッチエフェクト
+    dogImg.addEventListener('click', (e) => {
+      const particles = ['❤️', '⭐', '✨', '🎵', '💕', '🌟'];
+      const particle = particles[Math.floor(Math.random() * particles.length)];
+      
+      const el = document.createElement('div');
+      el.className = 'particle';
+      el.textContent = particle;
+      el.style.left = e.clientX + 'px';
+      el.style.top = e.clientY + 'px';
+      
+      document.body.appendChild(el);
+      
+      setTimeout(() => el.remove(), 1500);
+    });
   });
 
   // 画面切替（PDFは下層、ボタンは上層）
