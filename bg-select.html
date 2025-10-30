@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>背景をえらぶ - my imaginary dog</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="phone">
+
+  <section class="screen active" aria-label="背景選択">
+    <div class="overlay">
+      <div class="topbar">
+        <div class="home-icon" onclick="location.href='index.html'">⌂</div>
+        <h1 class="title">背景をえらぶ</h1>
+      </div>
+
+      <div class="grid">
+        <!-- サムネイルは main.js の BACKGROUND_LIST から自動生成する方式でもよいですが
+             ここではHTMLに直書きでもOK。直書き例（4つ）を置いておきます。 -->
+
+        <button class="bgcard" data-bg="images/backgrounds/bg_plain_beige.png">
+          <img src="images/backgrounds/bg_plain_beige.png" alt="プレーン(ベージュ)">
+          <span>プレーン(ベージュ)</span>
+        </button>
+
+        <button class="bgcard" data-bg="images/backgrounds/bg_dot_mint.png">
+          <img src="images/backgrounds/bg_dot_mint.png" alt="ドット(ミント)">
+          <span>ドット(ミント)</span>
+        </button>
+
+        <button class="bgcard" data-bg="images/backgrounds/bg_park.png">
+          <img src="images/backgrounds/bg_park.png" alt="公園">
+          <span>公園</span>
+        </button>
+
+        <button class="bgcard" data-bg="images/backgrounds/bg_room.png">
+          <img src="images/backgrounds/bg_room.png" alt="お部屋">
+          <span>お部屋</span>
+        </button>
+
+        <!-- 画像を増やすときは、上と同じ形でボタンを追加し、data-bg をPNGのパスにするだけ！ -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="main.js"></script>
+<script>
+  // 背景サムネのクリック → 保存 → ホームへ
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.bgcard');
+    if (!btn) return;
+    const path = btn.getAttribute('data-bg');
+    localStorage.setItem('selectedBg', path);
+    // 直後にホームへ戻る
+    location.href = 'index.html';
+  });
+</script>
+</body>
+</html>
