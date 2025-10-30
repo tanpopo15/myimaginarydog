@@ -111,6 +111,27 @@
   .back-btn:active{
     transform:translateY(0);
   }
+
+  /* 子画面の左上「ホームへ」 */
+  .home-icon{
+    width:40px; height:40px;
+    border-radius:12px;
+    background:#fff; box-shadow:var(--shadow);
+    display:grid; place-items:center;
+    user-select:none; cursor:pointer;
+    margin:6px;
+    font-weight:700;
+  }
+  .home-icon:hover {
+    background: #fff5e2;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,.15);
+  }
+  .home-icon:active{
+    transform:translateY(1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,.1);
+  }
+    
 </style>
 </head>
 <body>
