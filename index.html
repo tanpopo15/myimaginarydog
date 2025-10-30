@@ -264,9 +264,9 @@
 
   // ============ 背景PNGのリスト ===========
 
-const BACKGROUND_LIST = [
-  'images/haikei1.png'
-];
+  const BACKGROUND_LIST = [
+    'images/haikei1.png'
+  ];
 
   // URLパラメータから犬を取得
   const params = new URLSearchParams(window.location.search);
@@ -280,29 +280,29 @@ const BACKGROUND_LIST = [
       dogImg.src = dogImages[selectedDog];
     }
 
-  // 犬の画像タッチエフェクト
-if(dogImg) {
-    dogImg.addEventListener('click', (e) => {
-      const particles = ['❤️', '⭐', '✨', '🎵', '💕', '🌟'];
-      const particle = particles[Math.floor(Math.random() * particles.length)];
+    // 犬の画像タッチエフェクト
+  if(dogImg) {
+      dogImg.addEventListener('click', (e) => {
+        const particles = ['❤️', '⭐', '✨', '🎵', '💕', '🌟'];
+        const particle = particles[Math.floor(Math.random() * particles.length)];
+          
+        const el = document.createElement('div');
+        el.className = 'particle';
+        el.textContent = particle;
+          
+        // クリック位置を正確に取得
+        const rect = dogImg.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
         
-      const el = document.createElement('div');
-      el.className = 'particle';
-      el.textContent = particle;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        document.body.appendChild(el);
         
-      // クリック位置を正確に取得
-      const rect = dogImg.getBoundingClientRect();
-      const x = e.clientX;
-      const y = e.clientY;
-      
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      document.body.appendChild(el);
-      
-     setTimeout(() => el.remove(), 1500);
-     });
-  }
-});
+       setTimeout(() => el.remove(), 1500);
+       });
+    }
+  });
 
   // 画面切替（PDFは下層、ボタンは上層）
   const app = document.getElementById('app');
