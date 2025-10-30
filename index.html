@@ -55,6 +55,27 @@
     height:50%;
     object-fit:contain;
     transform:translateY(-25%);
+    cursor:pointer;
+    pointer-events:auto;
+  }
+
+  /* タッチエフェクト */
+  .particle{
+    position:absolute;
+    font-size:24px;
+    pointer-events:none;
+    animation:float-up 1.5s ease-out forwards;
+    z-index:10;
+  }
+  @keyframes float-up{
+    0%{
+      opacity:1;
+      transform:translate(-50%,-50%) scale(0.5);
+    }
+    100%{
+      opacity:0;
+      transform:translate(-50%,-150px) scale(1.2);
+    }
   }
 
   /* ボタン群（背景PDFの上） */
