@@ -66,27 +66,29 @@
 <script>
 /* ▼ ここでサムネ画像と色を定義（画像パスと見た目は自由に変えてOK） */
 const themes = [
-  { id:'cream',    label:'背景１',   img:'images/bg-cream.png',
+  { id:'bg1_tokai',   name:'都会',    img:'images/bg1_tokai.png',
     pageBg:'#FFF6FF', frameBorder:'#bda9ff', glow:'rgba(189,169,255,.25)' },
-  { id:'pink',     label:'背景２',     img:'images/bg-pink.png',
+  { id:'bg2_pink',    name:'ピンク',  img:'images/bg2_pink.png',
     pageBg:'#FFEFF3', frameBorder:'#f2a9c4', glow:'rgba(242,169,196,.22)' },
-  { id:'ramune',   label:'背景３',     img:'images/bg-ramune.png',
+  { id:'bg3_ramune',  name:'ラムネ',  img:'images/bg3_ramune.png',
     pageBg:'#EFFFFF', frameBorder:'#9fd9d9', glow:'rgba(159,217,217,.22)' },
-  { id:'tanpopo',  label:'背景４',   img:'images/bg-tanpopo.png',
+  { id:'bg4_tanpopo', name:'たんぽぽ',img:'images/bg4_tanpopo.png',
     pageBg:'#FFFCE6', frameBorder:'#f0d064', glow:'rgba(240,208,100,.22)' },
-  { id:'mint',     label:'背景５',     img:'images/bg-mint.png',
+  { id:'bg5_mint',    name:'ミント',  img:'images/bg5_mint.png',
     pageBg:'#F1FFF6', frameBorder:'#9ad4b4', glow:'rgba(154,212,180,.22)' },
-  { id:'lavender', label:'背景６', img:'images/bg-lavender.png',
+  { id:'bg6_lav',     name:'ラベンダー', img:'images/bg6_lavender.png',
     pageBg:'#F4F1FF', frameBorder:'#bda9ff', glow:'rgba(189,169,255,.25)' },
 ];
 
+/* ここを差し替え */
 const grid = document.getElementById('grid');
-grid.innerHTML = themes.map(t => `
+grid.innerHTML = themes.map((t, i) => `
   <article class="card" data-id="${t.id}">
-    <img src="${t.img}" alt="${t.label}">
-    <div class="label">${t.label}</div>
+    <img src="${t.img}" alt="背景${i+1}：${t.name}">
+    <div class="label">背景${i+1}：${t.name}</div>
   </article>
 `).join('');
+
 
 /* クリックでテーマ保存 → index.html へ戻る */
 grid.addEventListener('click', (e)=>{
