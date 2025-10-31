@@ -125,7 +125,7 @@
     display:grid;
     gap:12px;
   }
-  .home-buttons button, .home-buttons a{
+  .home-buttons a{
     background:var(--white);
     border:0; border-radius:14px;
     padding:12px 16px;
@@ -138,12 +138,12 @@
     text-decoration:none;
     font-family:inherit;
   }
-  .home-buttons button:hover, .home-buttons a:hover {
+  .home-buttons a:hover {
     background: #fff8e8;
     box-shadow: 0 8px 20px rgba(0,0,0,.15);
     transform: translateY(-2px);
   }
-  .home-buttons button:active, .home-buttons a:active{
+  .home-buttons a:active{
     background: #ffedc8;
     transform: translateY(1px) scale(.98);
     box-shadow: 0 3px 8px rgba(0,0,0,.1);
@@ -263,14 +263,14 @@
         <a href="bg-select.html">背景変更</a>
       </div>
       <div class="home-buttons">
-        <button data-goto="walk">さんぽ</button>
-        <button data-goto="bath">おふろ</button>
-        <button data-goto="sleep">ねる</button>
+        <a href="index_sanpo.html">さんぽ</a>
+        <a href="index_bathtime.html">おふろ</a>
+        <a href="index_sanpo.html">ねる</a>
       </div>
     </div>
   </section>
 
-  <!-- ======= さんぽ ======= -->
+  <!-- <!-- ======= さんぽ ======= -->
   <section class="screen" data-screen="walk" aria-label="さんぽ">
     <div class="bgwrap" aria-hidden="true">
       <object class="bgdoc" type="application/pdf"
@@ -279,7 +279,7 @@
       </object>
     </div>
     <div class="overlay">
-      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
+      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
     </div>
   </section>
 
@@ -292,7 +292,7 @@
       </object>
     </div>
     <div class="overlay">
-      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
+      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
     </div>
   </section>
 
@@ -305,17 +305,17 @@
       </object>
     </div>
     <div class="overlay">
-      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
+      <div class="home-icon" data-goto="home" aria-label="ホームへ"></div>
     </div>
-  </section>
+  </section> -->
 
   <!-- ======= 背景選択 ======= -->
   <section class="screen bg-select-screen" data-screen="bg-select" aria-label="背景選択">
     <div class="overlay">
-      <div class="home-icon" onclick="showScreen('home')" aria-label="ホームへ">🏠</div>
+      <div class="home-icon" onclick="showScreen('home')" aria-label="ホームへ"></div>
     </div>
     
-    <h1>背景を選んでね👕</h1>
+    <h1>背景を選んでね</h1>
     
     <div class="bg-grid">
       <a href="#" class="bg-card" onclick="selectBackground('cream'); return false;">
@@ -353,8 +353,8 @@
 </main>
 
 <script>
-// 💫 犬クリックエフェクト（一番上に表示 z-index:9999）
-const emojis = ['💖', '🌟', '🎵', '💫', '�'];
+//  犬クリックエフェクト（一番上に表示 z-index:9999）
+const emojis = ['', '', '', '', '�'];
 
 function createEffect(x, y) {
   const emoji = document.createElement('div');
@@ -372,7 +372,7 @@ function createEffect(x, y) {
   setTimeout(() => emoji.remove(), 1500);
 }
 
-// 🐶 犬画像の設定
+//  犬画像の設定
 const dogImages = {
   sizu: 'images/sizu.png',
   pome: 'images/pome.png',
@@ -464,4 +464,5 @@ function selectBackground(bgName) {
 }
 </script>
 </body>
+
 </html>
