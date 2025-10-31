@@ -107,7 +107,7 @@
     display:grid;
     gap:12px;
   }
-  .home-buttons button{
+  .home-buttons a{
     background:var(--white);
     border:0; border-radius:14px;
     padding:12px 16px;
@@ -116,13 +116,15 @@
     box-shadow:var(--shadow);
     cursor:pointer;
     transition:transform .05s ease;
+    text-align: center;
+    text-decoration: none;
   }
-  .home-buttons button:hover {
+  .home-buttons a:hover {
     background: #fff8e8;
     box-shadow: 0 8px 20px rgba(0,0,0,.15);
     transform: translateY(-2px);
   }
-  .home-buttons button:active{
+  .home-buttons a:active{
     background: #ffedc8;
     transform: translateY(1px) scale(.98);
     box-shadow: 0 3px 8px rgba(0,0,0,.1);
@@ -175,10 +177,10 @@
       </div>
       <div class="home-buttons">
         <!-- <button data-goto="walk">さんぽ</button> -->
-        <a href="index_sanpo.html" class="button">さんぽ</a>
-        <!-- <button data-goto="bath" class="button">おふろ</button> -->
+        <a href="index_sanpo.html">さんぽ</a>
+        <!-- <button data-goto="bath">おふろ</button> -->
         <a href="index_bathtime.html">おふろ</a>
-        <!-- <button data-goto="sleep" class="button">ねる</button> -->
+        <!-- <button data-goto="sleep">ねる</button> -->
         <a href="index_sleap.html">ねる</a>
       </div>
     </div>
