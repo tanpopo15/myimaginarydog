@@ -35,13 +35,24 @@
   .screen{ position:absolute; inset:0; display:none; }
   .screen.active{ display:block; }
 
-  /* PDFを全面に敷く */
-  .bgwrap{ position:absolute; inset:0; z-index:0; }
-  .bgdoc{
-    width:100%; height:100%;
-    border:0;
-    pointer-events:none;
-  }
+.bgwrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+/* 白背景を削除して、背景画像を設定 */
+.walk-before {
+  background-image: url('images/walk-after.png');
+}
+.walk-after {
+  background-image: url('images/walk-before.png');
+}
+.walk-before, .walk-after {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
   /* 画像を中央配置 */
   .bgwrap picture{
     position:absolute;
@@ -55,8 +66,17 @@
     height:50%;
     object-fit:contain;
     /* ホーム画面の犬と同じ位置に調整 */
-    transform:translateY(-25%);
+    transform:translateY(30%);
   }
+
+  .walk-before img {
+  transform: translateY(30%);  /* さんぽ前の位置 */
+}
+
+.walk-after img {
+  transform: translateY(10%);  /* さんぽ後の位置（さらに下） */
+}
+
 
   /* 【さんぽ画面用CSS】散歩状態ごとの背景と画像の切り替え用コンテナ */
   .walk-state {
@@ -183,7 +203,7 @@
       <div class="walk-state walk-before active">
         <object class="bgdoc" type="application/pdf"
                 data="pdfs/walk-before.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
-          <picture><img src="images/walk.png" alt="" id="walkDogImageBefore"></picture>
+          <picture><img src="images/walk-before.png" alt="" id="walkDogImageBefore"></picture>
         </object>
       </div>
 
@@ -242,7 +262,7 @@
 
   // URLパラメータから犬を取得 (例: index_sanpo.html?dog=pome)
   const params = new URLSearchParams(window.location.search);
-  const selectedDog = params.get('dog') || 'sizu';
+  const selectedDog = params.get('dog') || 'kogi';
   
   const app = document.getElementById('app');
 
