@@ -275,22 +275,22 @@
   });
 
 
-  // クリックイベントリスナー
-  app.addEventListener('click', e=>{
-    // 散歩画面の状態切り替えボタン (data-action) の処理
-    const walkBtn = e.target.closest('[data-action]');
-    if (!walkBtn) return;
-    
-    const action = walkBtn.getAttribute('data-action');
-    if (action === 'go-walk') {
-      // 「さんぽにいく」ボタンが押された -> 散歩後状態へ
-      setWalkState('after');
-    } else if (action === 'go-home') {
-      // 「かえる」ボタンが押された -> ホーム画面へ戻る
-      // URLに犬種パラメータを付けて index.html に遷移します
-      window.location.href = `index.html?dog=${selectedDog}`;
-    }
-  });
+// クリックイベントリスナー
+app.addEventListener('click', e=>{
+    // 散歩画面の状態切り替えボタン (data-action) の処理
+    const walkBtn = e.target.closest('[data-action]');
+    if (!walkBtn) return;
+    
+    const action = walkBtn.getAttribute('data-action');
+    if (action === 'go-walk') {
+        // 「さんぽにいく」ボタンが押された -> 散歩後状態へ
+        setWalkState('after');
+    } else if (action === 'go-home') {
+        // 【変更後】「かえる」ボタンが押された -> 散歩前の状態へ戻る
+        setWalkState('before');
+    }
+});
+
 
   // ホームアイコンの処理 (data-gotoの代わりに<a>タグを使用)
   const homeIcon = document.querySelector('.home-icon a');
