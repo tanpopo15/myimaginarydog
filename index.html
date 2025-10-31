@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>my imaginary dog</title>
+<style>
+  :root{
+    --choco:#6e5647;
+    --white:#fff;
+    --shadow:0 10px 25px rgba(0,0,0,.08);
+    --radius:16px;
+  }
+  body{
+    margin:0;
+    min-height:100svh;
+    display:grid; place-items:center;
+    background:#f7f3ff;
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
+    color:var(--choco);
+  }
+  .phone{
+    width:min(420px,96vw);
+    aspect-ratio:3/4;
+    position:relative;
+    border:4px solid #bda9ff;
+    border-radius:24px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:0 12px 40px rgba(0,0,0,.12);
+  }
+
+  .screen{ position:absolute; inset:0; display:none; }
+  .screen.active{ display:block; }
+
+  .bgwrap{ 
+    position:absolute; 
+    inset:0; 
+    z-index:0;
+  }
+  .bgdoc{
+    width:100%; height:100%;
+    border:0;
+    pointer-events:none;
+  }
+  .bgwrap picture{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  
+  /* 背景画像（一番下 z-index:1） */
+  #bgImage{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:1;
+  }
+  
+  /* 犬の画像（真ん中 z-index:5） */
+  #dogImage{
+    position:relative;
+    width:50%;
+    height:50%;
+    object-fit:contain;
+    transform:translateY(-25%);
+    z-index:5;
+    cursor:pointer;
+    pointer-events:auto;
+  }
+
+  /* ボタン群（一番上 z-index:10） */
+  .overlay{
+    position:absolute; 
+    inset:0; 
+    z-index:10;
+    display:flex; 
+    flex-direction:column;
+    padding:14px;
+    pointer-events:none;
+  }
+
+  .top-buttons,
+  .home-buttons,
+  .home-icon{
+    pointer-events:auto;
+  }
+
+  .top-buttons{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    margin-bottom:auto;
+  }
+  .top-buttons a, .top-buttons button{
+    background:var(--white);
+    border:0; border-radius:10px;
+    padding:8px 12px;
+    font-size:13px;
+    color:var(--choco);
+    text-decoration:none;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    transition:transform .05s ease;
+    white-space:nowrap;
+    font-family:inherit;
+  }
+  .top-buttons a:hover, .top-buttons button:hover{
+    background:#fff8e8;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    transform:translateY(-2px);
+  }
+  .top-buttons a:active, .top-buttons button:active{
+    background:#ffedc8;
+    transform:translateY(1px) scale(.98);
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
+  }
+
+  .home-buttons{
+    margin-top:auto;
+    display:grid;
+    gap:12px;
+  }
+  .home-buttons button, .home-buttons a{
+    background:var(--white);
+    border:0; border-radius:14px;
+    padding:12px 16px;
+    font-size:20px; letter-spacing:.35em;
+    color:var(--choco);
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    transition:transform .05s ease;
+    text-align:center;
+    text-decoration:none;
+    font-family:inherit;
+  }
+  .home-buttons button:hover, .home-buttons a:hover {
+    background: #fff8e8;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    transform: translateY(-2px);
+  }
+  .home-buttons button:active, .home-buttons a:active{
+    background: #ffedc8;
+    transform: translateY(1px) scale(.98);
+    box-shadow: 0 3px 8px rgba(0,0,0,.1);
+  }
+
+  .home-icon{
+    width:40px; height:40px;
+    border-radius:12px;
+    background:#fff; box-shadow:var(--shadow);
+    display:grid; place-items:center;
+    user-select:none; cursor:pointer;
+    margin:6px;
+    font-weight:700;
+  }
+  .home-icon:hover {
+    background: #fff5e2;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,.15);
+  }
+  .home-icon:active{
+    transform:translateY(1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,.1);
+  }
+
+  /* 背景選択画面用スタイル */
+  .bg-select-screen {
+    background: linear-gradient(135deg, #f7f3ff 0%, #e8deff 100%);
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .bg-select-screen h1 {
+    text-align: center;
+    font-size: 24px;
+    margin: 10px 0 30px;
+    color: var(--choco);
+  }
+
+  .bg-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding-bottom: 20px;
+  }
+
+  .bg-card {
+    background: white;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: var(--choco);
+  }
+
+  .bg-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+  }
+
+  .bg-card:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+
+  .bg-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+
+  .bg-name {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* エフェクト用アニメーション（一番上 z-index:9999） */
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    50% { transform: translateY(-40px) scale(1.3); }
+    100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .home-buttons button,
+    .home-buttons a,
+    .top-buttons a,
+    .top-buttons button,
+    .home-icon{ transition:none; }
+  }
+</style>
+</head>
+<body>
+<main class="phone" id="app">
+
+  <!-- ======= ホーム ======= -->
+  <section class="screen active" data-screen="home" aria-label="ホーム">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/home.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture>
+          <!-- 背景画像（一番下） -->
+          <img src="images/backgrounds/cream.png" alt="" id="bgImage">
+          <!-- 犬の画像（真ん中） -->
+          <img src="images/sizu.png" alt="" id="dogImage">
+        </picture>
+      </object>
+    </div>
+
+    <div class="overlay">
+      <div class="top-buttons">
+        <a href="dog-select.html">いぬ変更</a>
+        <a href="bg-select.html">背景変更</a>
+      </div>
+      <div class="home-buttons">
+        <button data-goto="walk">さんぽ</button>
+        <button data-goto="bath">おふろ</button>
+        <button data-goto="sleep">ねる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= さんぽ ======= -->
+  <section class="screen" data-screen="walk" aria-label="さんぽ">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/walk.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture><img src="images/walk.png" alt=""></picture>
+      </object>
+    </div>
+    <div class="overlay">
+      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
+    </div>
+  </section>
+
+  <!-- ======= おふろ ======= -->
+  <section class="screen" data-screen="bath" aria-label="おふろ">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/bath.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture><img src="images/bath.png" alt=""></picture>
+      </object>
+    </div>
+    <div class="overlay">
+      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
+    </div>
+  </section>
+
+  <!-- ======= ねる ======= -->
+  <section class="screen" data-screen="sleep" aria-label="ねる">
+    <div class="bgwrap" aria-hidden="true">
+      <object class="bgdoc" type="application/pdf"
+              data="pdfs/sleep.pdf#view=Fit&toolbar=0&navpanes=0&scrollbar=0">
+        <picture><img src="images/sleep.png" alt=""></picture>
+      </object>
+    </div>
+    <div class="overlay">
+      <div class="home-icon" data-goto="home" aria-label="ホームへ">🏠</div>
+    </div>
+  </section>
+
+  <!-- ======= 背景選択 ======= -->
+  <section class="screen bg-select-screen" data-screen="bg-select" aria-label="背景選択">
+    <div class="overlay">
+      <div class="home-icon" onclick="showScreen('home')" aria-label="ホームへ">🏠</div>
+    </div>
+    
+    <h1>背景を選んでね👕</h1>
+    
+    <div class="bg-grid">
+      <a href="#" class="bg-card" onclick="selectBackground('cream'); return false;">
+        <img src="images/backgrounds/cream.png" alt="クリーム" class="bg-preview">
+        <p class="bg-name">クリーム</p>
+      </a>
+      
+      <a href="#" class="bg-card" onclick="selectBackground('pink'); return false;">
+        <img src="images/backgrounds/pink.png" alt="ピンク" class="bg-preview">
+        <p class="bg-name">ピンク</p>
+      </a>
+      
+      <a href="#" class="bg-card" onclick="selectBackground('ramune'); return false;">
+        <img src="images/backgrounds/ramune.png" alt="ラムネ" class="bg-preview">
+        <p class="bg-name">ラムネ</p>
+      </a>
+      
+      <a href="#" class="bg-card" onclick="selectBackground('tanpopo'); return false;">
+        <img src="images/backgrounds/tanpopo.png" alt="たんぽぽ" class="bg-preview">
+        <p class="bg-name">たんぽぽ</p>
+      </a>
+      
+      <a href="#" class="bg-card" onclick="selectBackground('mint'); return false;">
+        <img src="images/backgrounds/mint.png" alt="ミント" class="bg-preview">
+        <p class="bg-name">ミント</p>
+      </a>
+      
+      <a href="#" class="bg-card" onclick="selectBackground('lavender'); return false;">
+        <img src="images/backgrounds/lavender.png" alt="ラベンダー" class="bg-preview">
+        <p class="bg-name">ラベンダー</p>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// 💫 犬クリックエフェクト（一番上に表示 z-index:9999）
+const emojis = ['💖', '🌟', '🎵', '💫', '�'];
+
+function createEffect(x, y) {
+  const emoji = document.createElement('div');
+  emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  Object.assign(emoji.style, {
+    position: 'fixed',
+    left: `${x}px`,
+    top: `${y}px`,
+    fontSize: '28px',
+    pointerEvents: 'none',
+    zIndex: '9999',
+    animation: 'floatUp 1.5s ease-out forwards'
+  });
+  document.body.appendChild(emoji);
+  setTimeout(() => emoji.remove(), 1500);
+}
+
+// 🐶 犬画像の設定
+const dogImages = {
+  sizu: 'images/sizu.png',
+  pome: 'images/pome.png',
+  shiba: 'images/shiba.png',
+  hasuki: 'images/hasuki.png',
+  pagu: 'images/pagu.png',
+  kogi: 'images/kogi.png'
+};
+
+// 🎨 背景画像の設定
+const backgroundImages = {
+  cream: 'images/backgrounds/cream.png',
+  pink: 'images/backgrounds/pink.png',
+  ramune: 'images/backgrounds/ramune.png',
+  tanpopo: 'images/backgrounds/tanpopo.png',
+  mint: 'images/backgrounds/mint.png',
+  lavender: 'images/backgrounds/lavender.png'
+};
+
+// URLパラメータとlocalStorageから設定を読み込み
+const params = new URLSearchParams(window.location.search);
+const selectedDog = params.get('dog') || (typeof localStorage !== 'undefined' ? localStorage.getItem('selectedDog') : null) || 'sizu';
+const selectedBg = params.get('bg') || (typeof localStorage !== 'undefined' ? localStorage.getItem('selectedBackground') : null) || 'cream';
+
+window.addEventListener('load', () => {
+  // 犬の画像を設定
+  const dogImg = document.getElementById('dogImage');
+  if(dogImg && dogImages[selectedDog]) {
+    dogImg.src = dogImages[selectedDog];
+    if(typeof localStorage !== 'undefined') {
+      localStorage.setItem('selectedDog', selectedDog);
+    }
+  }
+  
+  // 背景画像を設定
+  const bgImg = document.getElementById('bgImage');
+  if(bgImg && backgroundImages[selectedBg]) {
+    bgImg.src = backgroundImages[selectedBg];
+    if(typeof localStorage !== 'undefined') {
+      localStorage.setItem('selectedBackground', selectedBg);
+    }
+  }
+
+  // 犬クリックでエフェクト
+  if(dogImg) {
+    dogImg.addEventListener('click', (e) => {
+      const rect = dogImg.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      // ランダムに左右どちらかへずらす
+      const side = Math.random() < 0.5 ? -1 : 1;
+      const baseX = cx + side * (rect.width * 0.6);
+
+      for (let i = 0; i < 5; i++) {
+        const offsetX = (Math.random() - 0.5) * 40;
+        const offsetY = (Math.random() - 0.5) * 40;
+        setTimeout(() => createEffect(baseX + offsetX, cy + offsetY), i * 100);
+      }
+    });
+  }
+});
+
+// 画面切替
+const app = document.getElementById('app');
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(sc=>{
+    sc.classList.toggle('active', sc.dataset.screen===name);
+  });
+}
+
+// data-goto属性でのページ内遷移
+app.addEventListener('click', e=>{
+  const trg = e.target.closest('[data-goto]');
+  if(!trg) return;
+  showScreen(trg.getAttribute('data-goto'));
+});
+
+// 背景選択
+function selectBackground(bgName) {
+  const bgImg = document.getElementById('bgImage');
+  if(bgImg && backgroundImages[bgName]) {
+    bgImg.src = backgroundImages[bgName];
+    if(typeof localStorage !== 'undefined') {
+      localStorage.setItem('selectedBackground', bgName);
+    }
+  }
+  showScreen('home');
+}
+</script>
+</body>
+</html>
