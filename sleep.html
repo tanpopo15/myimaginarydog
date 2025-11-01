@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>おやすみ | my imaginary dog</title>
+<title>my imaginary dog - ねる</title>
 <style>
   :root{
     --choco:#6e5647;
@@ -30,26 +30,23 @@
     box-shadow:0 12px 40px rgba(0,0,0,.12);
   }
 
-  .screen{ position:absolute; inset:0; }
-  .screen.active{ display:block; }
+  .screen{ 
+    position:absolute; 
+    inset:0; 
+    display:block; /* 常にアクティブ */
+  }
 
   .bgwrap{ 
     position:absolute; 
     inset:0; 
     z-index:0;
-    background: #1a1829; /* 夜の背景色 */
   }
-  .bgwrap picture{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .bgwrap img {
+  .bgwrap picture img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 画像がコンテナに収まるように調整 */
+    object-fit: cover;
   }
   
   .overlay{
@@ -59,52 +56,164 @@
     display:flex; 
     flex-direction:column;
     padding:14px;
-    pointer-events:none;
+    pointer-events:none; /* 基本は無効 */
+  }
+  
+  /* メインの操作ボタン（おやすみ・起きる） */
+  .home-buttons{
+    margin-top:auto;
+    display:grid;
+    gap:12px;
+    pointer-events:auto; /* ボタンエリアだけ有効化 */
+  }
+  .home-buttons a{
+    background:var(--white);
+    border:0; border-radius:14px;
+    padding:12px 16px;
+    font-size:20px; letter-spacing:.35em;
+    color:var(--choco);
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    transition:transform .05s ease;
+    text-align:center;
+    text-decoration:none;
+    font-family:inherit;
+  }
+  .home-buttons a:hover {
+    background: #fff8e8;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    transform: translateY(-2px);
+  }
+  .home-buttons a:active{
+    background: #ffedc8;
+    transform: translateY(1px) scale(.98);
+    box-shadow: 0 3px 8px rgba(0,0,0,.1);
   }
 
+  /* ホームに戻るアイコン（ページ3で表示） */
   .home-icon{
-    pointer-events:auto;
+    pointer-events:auto; /* アイコンだけ有効化 */
     width:40px; height:40px;
     border-radius:12px;
-    background:var(--white); 
-    box-shadow:var(--shadow);
+    background:#fff; box-shadow:var(--shadow);
     display:grid; place-items:center;
     user-select:none; cursor:pointer;
     margin:6px;
     font-weight:700;
-    text-decoration: none; /* リンクの下線を消す */
-    color: var(--choco);
-    font-size: 20px;
+    /* 矢印（ホームに戻る）アイコンのスタイル */
+    border-top: 3px solid var(--choco);
+    border-left: 3px solid var(--choco);
+    transform: rotate(-45deg);
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 16px; /* 位置調整 */
   }
   .home-icon:hover {
     background: #fff5e2;
-    transform: translateY(-1px);
+    transform: translateY(-1px) rotate(-45deg);
     box-shadow: 0 6px 12px rgba(0,0,0,.15);
   }
   .home-icon:active{
-    transform:translateY(1px);
+    transform:translateY(1px) rotate(-45deg);
     box-shadow: 0 3px 6px rgba(0,0,0,.1);
+  }
+  
+  /* 要素を非表示にするためのクラス */
+  .hidden {
+    display: none !important;
   }
 
   @media (prefers-reduced-motion: reduce){
+    .home-buttons a,
     .home-icon{ transition:none; }
   }
 </style>
 </head>
 <body>
-<main class="phone">
 
-  <section class="screen active" aria-label="ねる">
+<main class="phone" id="app">
+
+  <section class="screen active" data-screen="sleep" aria-label="ねる">
+    
     <div class="bgwrap" aria-hidden="true">
-      <picture>
-        <img src="images/sleep.png" alt="眠っている犬">
-      </picture>
+        <picture>
+          <img src="images/sleep.png" alt="おやすみ..." id="sleepImage">
+        </picture>
     </div>
+    
     <div class="overlay">
-      <a href="index.html" class="home-icon" aria-label="ホームへ"></a>
+      
+      <a href="index.html" class="home-icon hidden" id="homeIconSleep" aria-label="ホームへ"></a>
+      
+      <div class="home-buttons" id="mainButtonContainer">
+        <a href="#" id="sleepButton">おやすみなさい</a>
+      </div>
+      
     </div>
   </section>
 
 </main>
+
+<script>
+  // --- ここを編集してください ---
+  
+  // 各ページで表示する画像のパスを設定
+  const imagePaths = {
+    page1: 'images/sleep1.png',       // ページ1「おやすみなさい」の画像
+    page2: 'images/sleep2.png',       // ページ2「起きる」の画像 (※好きな画像パスに変更してください)
+    page3: 'images/sleep3.png'         // ページ3「ホームへ」の画像 (※好きな画像パスに変更してください)
+  };
+
+  // --- 編集ここまで ---
+
+
+  // ページの現在の状態 (1, 2, または 3)
+  let sleepState = 1;
+
+  // 操作するHTML要素を取得
+  const imageEl = document.getElementById('sleepImage');
+  const buttonEl = document.getElementById('sleepButton');
+  const buttonContainer = document.getElementById('mainButtonContainer');
+  const homeIcon = document.getElementById('homeIconSleep');
+
+  // メインボタンがクリックされたときの処理
+  buttonEl.addEventListener('click', (event) => {
+    // ページが遷移するのを防ぐ
+    event.preventDefault(); 
+    
+    if (sleepState === 1) {
+      // --- ページ1 → ページ2 へ ---
+      
+      // 画像をページ2用に変更
+      imageEl.src = imagePaths.page2;
+      imageEl.alt = 'ぐっすり...';
+      
+      // ボタンの文字を「起きる」に変更
+      buttonEl.textContent = '起きる';
+      
+      // 状態を2に進める
+      sleepState = 2;
+      
+    } else if (sleepState === 2) {
+      // --- ページ2 → ページ3 へ ---
+      
+      // 画像をページ3用に変更
+      imageEl.src = imagePaths.page3;
+      imageEl.alt = 'おはよう！';
+      
+      // 「起きる」ボタンを隠す
+      buttonContainer.classList.add('hidden');
+      
+      // 「ホーム」アイコンを表示する
+      homeIcon.classList.remove('hidden');
+      
+      // 状態を3に進める
+      sleepState = 3;
+    }
+  });
+</script>
+
 </body>
 </html>
