@@ -6,7 +6,7 @@
     <title>お風呂アニメーション</title>
     
     <style>
-        /* --- 参照元（さんぽ画面）のCSS変数 --- */
+        /* --- 1. CSS変数の追加 --- */
         :root{
             --choco:#6e5647;
             --white:#fff;
@@ -14,11 +14,11 @@
             --radius:16px;
         }
 
-        /* --- 参照元（さんぽ画面）の全体・スマホ枠CSS --- */
+        /* --- 2. ページ全体＆スマホ枠 (body/phone) --- */
         body{
             margin:0;
             min-height:100svh;
-            display:grid; place-items:center;
+            display:grid; place-items:center; /* コンテンツを画面中央に配置 */
             background:#f7f3ff;
             font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
             color:var(--choco);
@@ -32,15 +32,29 @@
             overflow:hidden;
             background:#fff;
             box-shadow:0 12px 40px rgba(0,0,0,.12);
-        }
-        /* 画面（PDF＋ボタン） */
-        .screen { 
-            position:absolute; inset:0; 
-            background-color: #f0f0f0; /* 背景色 */
-            overflow: hidden; 
+            /* phoneコンテナ内の要素配置を調整 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 15px; /* ボタンのための上部スペース */
         }
 
-        /* --- 画像/アニメーションのコンテナCSS --- */
+        /* --- 3. screenの調整 --- */
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 70px); /* ボタンの高さを考慮して調整 */
+            max-width: none;
+            background-color: white;
+            box-shadow: none; /* phoneが影を持つため不要 */
+            overflow: hidden;
+            margin-top: 0;
+            top: 0;
+            /* 画面下部に配置するボタンのためのスペースを開ける */
+            bottom: 70px; 
+        }
+
         .screen img {
             width: 100%;
             height: 100%;
@@ -57,248 +71,215 @@
             opacity: 1;
         }
 
-        /* ボタン群（背景PDFの上） */
-        .overlay{
-            position:absolute; inset:0; z-index:10; /* Z-indexを上げて画像を覆う */
-            display:flex; flex-direction:column;
-            padding:14px;
-        }
-
-        /* --- ボタンの共通スタイル (さんぽ画面のデザインを参照) --- */
-        .app-button {
-            background: var(--white);
-            border: 0; 
-            border-radius: 14px;
-            padding: 12px 16px;
+        /* --- 4. ボタンの共通スタイル (.btn) --- */
+        .btn {
+            z-index: 10;
+            padding: 12px 16px; /* 統一されたパディング */
             font-size: 20px; 
             font-weight: bold;
-            letter-spacing: .1em; /* 調整 */
+            cursor: pointer;
+            border: 0; 
+            border-radius: 14px; /* 大きめの角丸 */
+            text-align: center;
+            
+            /* ベーススタイル */
+            background: var(--white); 
             color: var(--choco);
             box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform .05s ease, opacity 0.3s ease, background 0.3s ease;
-            text-align: center;
+            transition: transform .05s ease, background 0.3s ease, box-shadow 0.3s ease;
+            
+            /* flex itemとして中央に配置するため、幅を指定 */
+            width: 80%;
+            max-width: 250px;
         }
 
-        .app-button:hover {
-            background: #fff8e8; /* ホバー色 */
+        /* --- ボタンのホバー/アクティブスタイル適用 --- */
+        .btn:hover {
+            background: #fff8e8; /* 触れたら色が変わる */
             box-shadow: 0 8px 20px rgba(0,0,0,.15);
-            transform: translateY(-2px);
+            transform: translateY(-2px); /* 動く */
         }
-        .app-button:active{
-            background: #ffedc8; /* アクティブ色 */
-            transform: translateY(1px) scale(.98);
+
+        .btn:active {
+            background: #ffedc8; /* 押したら色が変わる */
+            transform: translateY(1px) scale(.98); /* 動く（沈み込む） */
             box-shadow: 0 3px 8px rgba(0,0,0,.1);
         }
 
         /* --- 個別のボタン配置スタイル --- */
         
-        /* おふろボタンのコンテナ (上部) */
-        .top-button-container {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-top: 5px; /* 上からのマージン */
-            height: 48px;
-        }
-
-        /* あがるボタンのコンテナ (下部) */
-        .bottom-button-container {
-            margin-top: auto; /* 下部へ配置 */
-            margin-bottom: 20px; 
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            height: 48px;
-        }
-
-        /* おふろボタン (上部に配置) */
+        /* おふろボタン (画面上部) */
         #bathButton {
-            width: 150px;
+            margin-top: 5px; 
+            order: 1; /* flex順序 */
         }
 
-        /* あがるボタン (下部に配置) */
+        /* あがるボタン (画面下部) */
         #finishButton {
-            width: 150px;
+            /* phone内で画面下部に固定 */
+            position: absolute;
+            bottom: 20px; 
+            /* 画面中央に配置するためにleft/rightも指定 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 250px;
+            z-index: 30; /* 最前面 */
         }
         
-        /* --- ホームボタンのCSS (参照元のまま) --- */
-        .home-icon{
-            width:40px; height:40px;
-            border-radius:12px;
-            background:#fff; box-shadow:var(--shadow);
-            display:grid; place-items:center;
-            user-select:none; cursor:pointer;
-            margin:6px;
-            font-weight:700;
-            transition: all 0.2s ease;
-            /* お風呂画面では最初非表示 */
-            display: none; 
-        }
-        .home-icon a::before {
-            content: "🏠";
-            font-size: 16px;
-            display: block;
-        }
-        .home-icon a {
-            text-decoration: none;
-            color: inherit;
+        /* --- ホームボタンのCSS (位置調整) --- */
+        .home-icon {
+            position: absolute;
+            top: 15px; /* phoneのpaddingと合わせる */
+            left: 15px;
+            z-index: 40;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: var(--shadow); /* var(--shadow)を使用 */
             display: grid;
             place-items: center;
-            width: 100%;
-            height: 100%;
+            user-select: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--choco); /* var(--choco)を使用 */
+            margin: 0;
+            display: none; 
         }
+
+        /* ホームアイコンのホバー/アクティブスタイルは維持 */
         .home-icon:hover {
             background: #fff5e2;
             transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(0,0,0,.15);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .15);
         }
-        .home-icon:active{
-            transform:translateY(1px);
-            box-shadow: 0 3px 6px rgba(0,0,0,.1);
+
+        .home-icon:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
             background: #ffedc8;
         }
 
         @media (prefers-reduced-motion: reduce){
-            .app-button,
-            .home-icon{ transition:none; }
+            .btn, .home-icon{ transition:none; }
         }
     </style>
 </head>
 <body>
-<main class="phone" id="app">
 
-    <div id="bathContainer" class="screen">
+    <main class="phone">
+        <button id="bathButton" class="btn" onclick="startBathAnimation()">おふろ</button>
         
-        <img id="bath_before" class="active" src="images/bath_before.png" alt="お風呂前">
-        <img id="bath_awa_little" src="images/bath_awa_little.png" alt="泡少し">
-        <img id="bath_awa_alittle" src="images/bath_awa_alittle.png" alt="泡中くらい">
-        <img id="bath_awa_some" src="images/bath_awa_some.png" alt="泡たくさん">
-        <img id="bath_after" src="images/bath_after.png" alt="お風呂後">
-    </div>
+        <div id="bathContainer" class="screen">
+            
+            <a href="index.html" id="homeIcon" class="home-icon" onclick="goToHome()">🏠</a> 
 
-    <div class="overlay">
-        
-        <div class="home-icon" aria-label="ホームへ" id="homeIconContainer">
-            <a href="index.html" onclick="goToHome(event)"></a> 
+            <img id="bath_before" class="active" src="images/bath_before.png" alt="お風呂前">
+            <img id="bath_awa_little" src="images/bath_awa_little.png" alt="泡少し">
+            <img id="bath_awa_alittle" src="images/bath_awa_alittle.png" alt="泡中くらい">
+            <img id="bath_awa_some" src="images/bath_awa_some.png" alt="泡たくさん">
+            <img id="bath_after" src="images/bath_after.png" alt="お風呂後">
         </div>
 
-        <div class="top-button-container">
-            <button id="bathButton" class="app-button" onclick="startBathAnimation()">おふろ</button>
-        </div>
+        <button id="finishButton" class="btn" onclick="finishBath()" style="display:none;">あがる</button>
+    </main>
 
-        <div class="bottom-button-container">
-            <button id="finishButton" class="app-button" onclick="finishBath()" style="display:none;">あがる</button>
-        </div>
-        
-    </div>
+    <script>
+        /* --- JavaScript コード --- */
+        const bathButton = document.getElementById('bathButton');
+        const finishButton = document.getElementById('finishButton');
+        const homeIcon = document.getElementById('homeIcon');
 
-</main>
+        const images = {
+            'before': document.getElementById('bath_before'),
+            'little': document.getElementById('bath_awa_little'),
+            'alittle': document.getElementById('bath_awa_alittle'),
+            'some': document.getElementById('bath_awa_some'),
+            'after': document.getElementById('bath_after')
+        };
 
-<script>
-    /* --- JavaScript コード --- */
-    const bathButton = document.getElementById('bathButton');
-    const finishButton = document.getElementById('finishButton');
-    const homeIconContainer = document.getElementById('homeIconContainer'); // コンテナ要素
+        let currentImageId = 'before';
+        let animationTimeouts = []; // タイムアウトIDを保持
 
-    const images = {
-        'before': document.getElementById('bath_before'),
-        'little': document.getElementById('bath_awa_little'),
-        'alittle': document.getElementById('bath_awa_alittle'),
-        'some': document.getElementById('bath_awa_some'),
-        'after': document.getElementById('bath_after')
-    };
-
-    let currentImageId = 'before';
-    let animationTimeouts = []; // タイムアウトIDを保持
-
-    function switchImage(nextId) {
-        images[currentImageId].classList.remove('active');
-        images[nextId].classList.add('active');
-        currentImageId = nextId;
-        updateButtons(nextId);
-    }
-
-    function updateButtons(currentId) {
-        // ホームボタンの表示/非表示を制御
-        if (currentId === 'before' || currentId === 'after') {
-            homeIconContainer.style.display = 'grid'; // gridで表示
-        } else {
-            homeIconContainer.style.display = 'none';
+        function switchImage(nextId) {
+            images[currentImageId].classList.remove('active');
+            images[nextId].classList.add('active');
+            currentImageId = nextId;
+            updateButtons(nextId);
         }
 
-        // おふろ・あがるボタンの表示/非表示を制御
-        if (currentId === 'after') {
-            bathButton.style.display = 'block';
-            finishButton.style.display = 'block';
-        } else if (currentId === 'before') {
-            bathButton.style.display = 'block';
-            finishButton.style.display = 'none';
-        } else {
-            // アニメーション中の時
-            bathButton.style.display = 'none';
-            finishButton.style.display = 'none';
+        function updateButtons(currentId) {
+            // ホームボタンの表示/非表示を制御
+            if (currentId === 'before' || currentId === 'after') {
+                homeIcon.style.display = 'grid';
+            } else {
+                homeIcon.style.display = 'none';
+            }
+
+            // その他ボタンの表示/非表示を制御
+            if (currentId === 'after') {
+                bathButton.style.display = 'block';
+                finishButton.style.display = 'block';
+            } else if (currentId === 'before') {
+                bathButton.style.display = 'block';
+                finishButton.style.display = 'none';
+            } else {
+                // アニメーション中の時
+                bathButton.style.display = 'none';
+                finishButton.style.display = 'none';
+            }
         }
-    }
-    
-    function goToHome(event) {
-        event.preventDefault(); // 画面遷移を一時的に停止
         
-        // 既存のアニメーションを全てクリアして中断
-        animationTimeouts.forEach(clearTimeout);
-        animationTimeouts = [];
-        
-        // 画面を「お風呂前」に戻す
-        switchImage('before'); 
-        console.log("ホーム画面に戻りました。");
+        function goToHome() {
+            // 既存のアニメーションを全てクリアして中断
+            animationTimeouts.forEach(clearTimeout);
+            animationTimeouts = [];
+            switchImage('before');
+            console.log("ホーム画面に戻りました。");
+        }
 
-        // 実際のアプリではここで遷移処理 (例: window.location.href = 'index.html')
-    }
+        function startBathAnimation() {
+            // 既存のタイムアウトを全てクリア
+            animationTimeouts.forEach(clearTimeout);
+            animationTimeouts = [];
 
-    function startBathAnimation() {
-        if (currentImageId !== 'before' && currentImageId !== 'after') return; // アニメーション中は無視
+            switchImage('little');
+            
+            // アニメーションのシーケンス
+            const sequence = [
+                { id: 'alittle', time: 3000 },
+                { id: 'some', time: 3000 },
+                { id: 'alittle', time: 3000 },
+                { id: 'little', time: 2000 },
+                { id: 'after', time: 2000 }
+            ];
 
-        // 既存のタイムアウトを全てクリア
-        animationTimeouts.forEach(clearTimeout);
-        animationTimeouts = [];
+            let cumulativeTime = 0;
 
-        // アニメーション開始
-        switchImage('little');
-        
-        // アニメーションのシーケンス
-        const sequence = [
-            { id: 'alittle', time: 3000 },
-            { id: 'some', time: 3000 },
-            { id: 'alittle', time: 3000 },
-            { id: 'little', time: 2000 },
-            { id: 'after', time: 2000 } // 最終的に 'after' に遷移
-        ];
+            sequence.forEach(step => {
+                cumulativeTime += step.time;
+                const timeoutId = setTimeout(() => {
+                    // ホームに戻っていないかチェックしつつ画像を切り替え
+                    if (currentImageId !== 'before' && currentImageId !== 'after') {
+                         switchImage(step.id);
+                    }
+                }, cumulativeTime);
+                animationTimeouts.push(timeoutId);
+            });
+        }
 
-        let cumulativeTime = 0;
+        function finishBath() {
+            console.log("お風呂から上がりました。画面はそのままです。");
+        }
 
-        sequence.forEach(step => {
-            cumulativeTime += step.time;
-            const timeoutId = setTimeout(() => {
-                // アニメーション中断チェック
-                if (animationTimeouts.length > 0) { 
-                    switchImage(step.id);
-                }
-            }, cumulativeTime);
-            animationTimeouts.push(timeoutId);
-        });
-    }
+        // 最初の画面状態をセット
+        window.onload = function() {
+            updateButtons(currentImageId);
+        };
+    </script>
 
-    function finishBath() {
-        // 「あがる」ボタンは、お風呂後の画面で押しても画面はそのまま、という仕様を反映
-        // 特に画面遷移や画像変更は行わない
-        console.log("お風呂から上がりました。画面はそのまま（お風呂後）の状態を維持します。");
-    }
-
-    // 最初の画面状態をセット
-    window.onload = function() {
-        // 初期状態（before）に合わせてボタンを表示
-        updateButtons(currentImageId);
-    };
-</script>
 </body>
 </html>
