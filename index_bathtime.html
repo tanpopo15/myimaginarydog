@@ -234,11 +234,17 @@
         }
         
         function goToHome() {
-            // 既存のアニメーションを全てクリアして中断
-            animationTimeouts.forEach(clearTimeout);
-            animationTimeouts = [];
-            switchImage('before');
-            console.log("ホーム画面に戻りました。");
+    // 1. 既存のアニメーションを全てクリアして中断
+    animationTimeouts.forEach(clearTimeout);
+    animationTimeouts = [];
+    
+    // 2. 画面を「お風呂前」の状態に戻す (必須ではないが、リセットのため維持)
+    switchImage('before'); 
+    
+    console.log("ホーム画面に戻ります。");
+    
+    // 3. **【追加】** 明示的に指定のHTMLファイルへ遷移させる
+    window.location.href = 'index.html'; 
         }
 
         function startBathAnimation() {
