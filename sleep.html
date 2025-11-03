@@ -90,35 +90,30 @@
     box-shadow: 0 3px 8px rgba(0,0,0,.1);
   }
 
-  /* ホームに戻るアイコン（ページ3で表示） */
-  .home-icon{
-    pointer-events:auto; /* アイコンだけ有効化 */
-    width:40px; height:40px;
-    border-radius:12px;
-    background:#fff; box-shadow:var(--shadow);
-    display:grid; place-items:center;
-    user-select:none; cursor:pointer;
-    margin:6px;
-    font-weight:700;
-    /* 矢印（ホームに戻る）アイコンのスタイル */
-    border-top: 3px solid var(--choco);
-    border-left: 3px solid var(--choco);
-    transform: rotate(-45deg);
-    width: 12px;
-    height: 12px;
-    padding: 0;
-    box-sizing: border-box;
-    margin: 16px; /* 位置調整 */
-  }
-  .home-icon:hover {
-    background: #fff5e2;
-    transform: translateY(-1px) rotate(-45deg);
-    box-shadow: 0 6px 12px rgba(0,0,0,.15);
-  }
-  .home-icon:active{
-    transform:translateY(1px) rotate(-45deg);
-    box-shadow: 0 3px 6px rgba(0,0,0,.1);
-  }
+/* ホームに戻るアイコン（ページ3で表示） */
+ .home-icon{
+  pointer-events:auto; /* アイコンだけ有効化 */
+  width:40px; height:40px;
+  border-radius:12px;
+  background:#fff; box-shadow:var(--shadow);
+  display:grid; place-items:center;
+  user-select:none; cursor:pointer;
+  margin:6px;
+  font-weight:700;
+  font-size: 20px; /* ★絵文字のサイズを調整 */
+  text-decoration: none; /* リンクの下線を削除 */
+  transition: transform .1s ease, background-color .1s ease, box-shadow .1s ease;
+ }
+ .home-icon:hover {
+  background: #fff5e2;
+  transform: translateY(-1px); /* rotateを削除 */
+  box-shadow: 0 6px 12px rgba(0,0,0,.15);
+ }
+ .home-icon:active{
+  transform:translateY(1px); /* rotateを削除 */
+  box-shadow: 0 3px 6px rgba(0,0,0,.1);
+  background: #ffedc8;
+ }
   
   /* 要素を非表示にするためのクラス */
   .hidden {
@@ -139,13 +134,13 @@
     
     <div class="bgwrap" aria-hidden="true">
         <picture>
-          <img src="images/sleep.png" alt="おやすみ..." id="sleepImage">
+          <img src="images/sleep1.png" alt="おやすみ..." id="sleepImage">
         </picture>
     </div>
     
     <div class="overlay">
       
-      <a href="index.html" class="home-icon hidden" id="homeIconSleep" aria-label="ホームへ"></a>
+      <a href="index.html" class="home-icon" id="homeIconSleep" aria-label="ホームへ">🏠</a>
       
       <div class="home-buttons" id="mainButtonContainer">
         <a href="#" id="sleepButton">おやすみなさい</a>
