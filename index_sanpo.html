@@ -262,7 +262,7 @@
 
   // URLパラメータから犬を取得 (例: index_sanpo.html?dog=pome)
   const params = new URLSearchParams(window.location.search);
-  const selectedDog = params.get('dog') || 'kogi';
+  const selectedDog = params.get('dog');
   
   const app = document.getElementById('app');
 
@@ -272,11 +272,9 @@
     const dogImageElementId = (state === 'before') ? 'walkDogImageBefore' : 'walkDogImageAfter';
     const dogImageElement = document.getElementById(dogImageElementId);
     
-    // 選択された犬種に応じた散歩中の画像をセット
-    if(dogImageElement && walkDogImages[selectedDog]) {
-      // 適切な画像パスをセット。未設定の場合はデフォルトパスを使用
-      dogImageElement.src = walkDogImages[selectedDog][state] || dogImageElement.src; 
-    }
+if(dogImageElement && selectedDog && walkDogImages[selectedDog]) {
+  dogImageElement.src = walkDogImages[selectedDog][state] || dogImageElement.src; 
+}
 
     document.querySelectorAll('.walk-state').forEach(el => {
       el.classList.toggle('active', el.classList.contains(`walk-${state}`));
